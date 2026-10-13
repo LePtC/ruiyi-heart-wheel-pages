@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>心动转盘 · 真心话大冒险</title>
+<link rel="stylesheet" href="assets/styles.b20a1d9473f66669.css">
+</head>
+<body>
+<div class="shell">
+<header class="top"><div class="brand"><span>♡</span> 心动转盘</div><div class="tools"><button class="soft" id="rules">玩法说明</button><button class="soft" id="fullscreen">全屏</button></div></header>
+<section class="hero"><div class="eyebrow">LET'S GET CLOSER</div><h1>转一下，聊近一点。</h1><p class="sub"><span data-bank-summary>50 道真心话 · 30 道大冒险</span><br>让偶然开场，让故事继续。</p>
+<div class="tabs" role="group" aria-label="选择题目类型"><button class="tab active" data-mode="all" aria-pressed="true">全部混抽</button><button class="tab" data-mode="truth" aria-pressed="false">真心话</button><button class="tab" data-mode="dare" aria-pressed="false">大冒险</button></div></section>
+<main class="game">
+<section class="wheel-panel" aria-label="抽题转盘"><div class="wheel-shell"><div class="pointer"></div><canvas id="wheel" aria-label="随机转盘，按开始转动抽题">请使用支持 Canvas 的浏览器。</canvas><div class="hub"><b>♡</b><small>GOOD LUCK</small></div></div>
+<div class="legend"><span><i class="dot"></i>真心话</span><span><i class="dot purple"></i>大冒险</span><span><i class="dot gray"></i>已抽过</span></div>
+<button id="spin" class="spin">开始转动 ↗</button><div class="progress" id="progress"></div></section>
+<section class="card" aria-label="抽题结果">
+<div class="card-head"><span id="badge" class="badge">今晚，从这一题开始</span><span class="number" id="number">80 道题已就绪</span></div>
+<div id="question" class="question" aria-live="polite" aria-atomic="true">真心话，还是大冒险？<br>交给一点小小的运气。</div>
+<p id="hint" class="hint">点「开始转动」，抽出你的题目。无需道具，轻松开场。</p>
+<div class="actions"><span id="timer" class="timer">01:00</span><button id="timerStart" class="soft" disabled>开始计时</button><button id="timerReset" class="soft" disabled>重置</button></div>
+<div class="card-foot"><span>不想回答或完成？可以换题。</span><button id="skip" class="soft" disabled>换一题 ↗</button></div>
+</section></main>
+<div class="bottom"><label class="toggle"><input id="noRepeat" type="checkbox" checked>本轮不重复抽题</label><div class="bottom-actions"><button id="bankButton" class="soft">查看全部题库</button><button id="historyButton" class="soft">抽题记录 <span id="historyCount">0</span></button><button id="reset" class="soft">重新开局</button></div></div>
+<p class="note">转盘数字是本轮混排位置，完整题目在右侧展示。<br>邀请与告白属于游戏任务，无需对方回应或真实表态。</p>
+<nav class="routes" aria-label="访问线路"><a href="http://129.204.252.209:8088/">主线路</a><a href="https://leptc.github.io/ruiyi-heart-wheel-pages/">备用线路</a><a href="links.html">更多入口</a><a href="offline.html" download="心动转盘-离线版.html">下载离线版</a></nav>
+</div>
+<dialog id="rulesDialog"><div class="dialog-head"><h2>轻松玩，慢慢聊</h2><button class="close">关闭</button></div><ol class="rule">
+<li><span data-bank-count>80</span>题开局随机混排，每道题抽中的机会相同。可以混抽，也可以只抽一种；切换模式保留本轮记录。</li>
+<li>默认不重复。换题时，刚才的题目仍计入已抽；抽完后点「重新开局」。取消“不重复”则可重复抽。</li>
+<li>左右按本人坐着时的方向沿桌边数人，不包含自己。人数不足就绕桌继续数，经过自己时跳过。</li>
+<li>开始前确定“正对面、左前方对角线、右前方对角线”各自对应谁。对应座位无人或对方跳过，向右顺延一位；只有自己时换题。</li>
+<li>大冒险由抽题者完成，对方无需共同表演或回应。出题任务有默认选项；邀请和告白不代表真实表态。</li>
+<li>真心话可以讲理由或故事，无需说他人姓名。每题建议一分钟；自愿参与，任何人都可以跳过。</li>
+<li>刷新页面会尽量保留本轮抽题记录；记录只保存在当前浏览器。文件可离线使用。</li></ol></dialog>
+<dialog id="bankDialog"><div class="dialog-head"><h2>全部题库 · <span data-bank-count>80</span>题</h2><button class="close">关闭</button></div><input id="search" class="search" placeholder="搜索题目、真心话或大冒险" aria-label="搜索题库"><div id="bankList"></div></dialog>
+<dialog id="historyDialog"><div class="dialog-head"><h2>本轮抽题记录</h2><button class="close">关闭</button></div><div id="historyList"></div></dialog>
+<dialog id="resetDialog"><div class="dialog-head"><h2>重新开局？</h2><button class="close">取消</button></div><p class="rule">将清空本轮记录，并重新打散<span data-bank-count>80</span>题。</p><button id="confirmReset" class="spin">确认重新开局</button></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<script defer src="assets/questions.e845fa48ac604857.js"></script>
+<script defer src="assets/app.2dbe5f50ace97df6.js"></script>
+</body></html>

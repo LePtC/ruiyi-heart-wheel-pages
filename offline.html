@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>心动转盘 · 真心话大冒险</title>
+<style>:root {
+  --ink: #38252f;
+  --muted: #8b737d;
+  --paper: #fffaf5;
+  --pink: #f4647a;
+  --purple: #8467b2;
+  --line: #eddfdf
+}
+
+* {
+  box-sizing: border-box
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(ellipse at 5% 5%, #ffe3d9, transparent 48%), radial-gradient(ellipse at 95% 85%, #eadff7, transparent 45%), var(--paper);
+  min-height: 100vh
+}
+
+button,
+input {
+  font: inherit
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  transition: transform .15s, background .2s
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px)
+}
+
+button:disabled {
+  cursor: default;
+  opacity: .45
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--purple);
+  outline-offset: 4px
+}
+
+.shell {
+  max-width: 1200px;
+  margin: auto;
+  padding: 32px 30px
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 1px
+}
+
+.brand span {
+  color: var(--pink)
+}
+
+.tools {
+  display: flex;
+  gap: 8px
+}
+
+.soft {
+  background: #ffffffb5;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 12px;
+  color: var(--ink)
+}
+
+.hero {
+  text-align: center;
+  margin: 38px 0 26px
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--muted)
+}
+
+h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  margin: 10px 0 12px;
+  letter-spacing: -2px
+}
+
+.sub {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  background: #eee3e6;
+  border-radius: 40px;
+  padding: 5px;
+  width: fit-content;
+  margin: 22px auto 0
+}
+
+.tab {
+  background: transparent;
+  padding: 11px 23px;
+  border-radius: 30px;
+  color: var(--muted)
+}
+
+.tab.active {
+  background: #fff;
+  box-shadow: 0 3px 10px #38252f0c;
+  color: var(--ink);
+  font-weight: 700
+}
+
+.game {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  gap: 35px;
+  align-items: center
+}
+
+.wheel-panel {
+  text-align: center
+}
+
+.wheel-shell {
+  position: relative;
+  width: min(100%, 540px);
+  margin: 0 auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff8f3;
+  padding: 14px;
+  box-shadow: 0 16px 60px #9e556c19, 0 0 0 1px #ffffff inset
+}
+
+#wheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%
+}
+
+.pointer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 38px;
+  background: var(--ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  z-index: 2;
+  filter: drop-shadow(0 3px 4px #0003)
+}
+
+.hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 7px solid #fff;
+  box-shadow: 0 4px 20px #38252f22;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  pointer-events: none
+}
+
+.hub b {
+  font-size: 30px;
+  color: var(--pink)
+}
+
+.hub small {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted)
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin: 20px 0 14px;
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: var(--pink)
+}
+
+.dot.purple {
+  background: var(--purple)
+}
+
+.dot.gray {
+  background: #d8cecf
+}
+
+.spin {
+  padding: 17px 44px;
+  background: var(--ink);
+  color: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px #38252f20;
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 240px
+}
+
+.progress {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 14px
+}
+
+.card {
+  background: #ffffffc9;
+  backdrop-filter: blur(8px);
+  border: 1px solid white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 14px 50px #38252f09;
+  min-height: 370px;
+  display: flex;
+  flex-direction: column
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center
+}
+
+.badge {
+  font-size: 12px;
+  background: #fff0f2;
+  color: #bd4560;
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-weight: 700
+}
+
+.badge.dare {
+  background: #eee7f6;
+  color: #755298
+}
+
+.number {
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.question {
+  font-size: clamp(23px, 2.3vw, 31px);
+  font-weight: 650;
+  line-height: 1.7;
+  letter-spacing: .2px;
+  flex: 1;
+  margin: 24px 0
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0 0 22px
+}
+
+.actions {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap
+}
+
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 23px;
+  min-width: 65px;
+  color: var(--purple);
+  font-weight: 700
+}
+
+.card-foot {
+  border-top: 1px solid var(--line);
+  margin-top: 22px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.bottom {
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px
+}
+
+.toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted)
+}
+
+input[type=checkbox] {
+  accent-color: var(--pink);
+  width: 18px;
+  height: 18px
+}
+
+.bottom-actions {
+  display: flex;
+  gap: 8px
+}
+
+.note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 28px;
+  line-height: 1.8
+}
+
+dialog {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 25px;
+  width: min(680px, 92vw);
+  max-height: 85vh;
+  background: var(--paper);
+  color: var(--ink)
+}
+
+dialog::backdrop {
+  background: #38252f66;
+  backdrop-filter: blur(4px)
+}
+
+.dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px
+}
+
+.dialog-head h2 {
+  margin: 0;
+  font-size: 22px
+}
+
+.close {
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 10px;
+  padding: 7px 13px
+}
+
+.search {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 15px;
+  background: white;
+  color: var(--ink)
+}
+
+.entry {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.8
+}
+
+.entry small {
+  color: var(--muted);
+  font-size: 11px
+}
+
+.entry p {
+  margin: 5px 0 0
+}
+
+.rule {
+  line-height: 1.9;
+  color: #69535e
+}
+
+.rule li {
+  margin-bottom: 12px
+}
+
+.empty {
+  color: var(--muted);
+  padding: 25px 0;
+  text-align: center
+}
+
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  z-index: 20;
+  font-size: 13px;
+  max-width: 90vw
+}
+
+@media(max-width:760px) {
+  .shell {
+    padding: 20px 18px
+  }
+
+  .brand {
+    font-size: 17px
+  }
+
+  .tools .soft {
+    padding: 8px 11px;
+    font-size: 12px
+  }
+
+  .hero {
+    margin: 28px 0 22px
+  }
+
+  h1 {
+    letter-spacing: -1px
+  }
+
+  .game {
+    grid-template-columns: 1fr;
+    gap: 25px
+  }
+
+  .wheel-shell {
+    max-width: 390px
+  }
+
+  .card {
+    min-height: 290px;
+    padding: 23px
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: stretch
+  }
+
+  .bottom-actions {
+    justify-content: center;
+    flex-wrap: wrap
+  }
+
+  .toggle {
+    justify-content: center
+  }
+
+  .hub {
+    width: 80px;
+    height: 80px
+  }
+
+  .hub b {
+    font-size: 24px
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 13px
+  }
+
+  .legend {
+    gap: 16px
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  * {
+    scroll-behavior: auto !important
+  }
+}
+
+.routes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin: 16px 0;
+  font-size: 12px;
+}
+
+.routes a {
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top"><div class="brand"><span>♡</span> 心动转盘</div><div class="tools"><button class="soft" id="rules">玩法说明</button><button class="soft" id="fullscreen">全屏</button></div></header>
+<section class="hero"><div class="eyebrow">LET'S GET CLOSER</div><h1>转一下，聊近一点。</h1><p class="sub"><span data-bank-summary>50 道真心话 · 30 道大冒险</span><br>让偶然开场，让故事继续。</p>
+<div class="tabs" role="group" aria-label="选择题目类型"><button class="tab active" data-mode="all" aria-pressed="true">全部混抽</button><button class="tab" data-mode="truth" aria-pressed="false">真心话</button><button class="tab" data-mode="dare" aria-pressed="false">大冒险</button></div></section>
+<main class="game">
+<section class="wheel-panel" aria-label="抽题转盘"><div class="wheel-shell"><div class="pointer"></div><canvas id="wheel" aria-label="随机转盘，按开始转动抽题">请使用支持 Canvas 的浏览器。</canvas><div class="hub"><b>♡</b><small>GOOD LUCK</small></div></div>
+<div class="legend"><span><i class="dot"></i>真心话</span><span><i class="dot purple"></i>大冒险</span><span><i class="dot gray"></i>已抽过</span></div>
+<button id="spin" class="spin">开始转动 ↗</button><div class="progress" id="progress"></div></section>
+<section class="card" aria-label="抽题结果">
+<div class="card-head"><span id="badge" class="badge">今晚，从这一题开始</span><span class="number" id="number">80 道题已就绪</span></div>
+<div id="question" class="question" aria-live="polite" aria-atomic="true">真心话，还是大冒险？<br>交给一点小小的运气。</div>
+<p id="hint" class="hint">点「开始转动」，抽出你的题目。无需道具，轻松开场。</p>
+<div class="actions"><span id="timer" class="timer">01:00</span><button id="timerStart" class="soft" disabled>开始计时</button><button id="timerReset" class="soft" disabled>重置</button></div>
+<div class="card-foot"><span>不想回答或完成？可以换题。</span><button id="skip" class="soft" disabled>换一题 ↗</button></div>
+</section></main>
+<div class="bottom"><label class="toggle"><input id="noRepeat" type="checkbox" checked>本轮不重复抽题</label><div class="bottom-actions"><button id="bankButton" class="soft">查看全部题库</button><button id="historyButton" class="soft">抽题记录 <span id="historyCount">0</span></button><button id="reset" class="soft">重新开局</button></div></div>
+<p class="note">转盘数字是本轮混排位置，完整题目在右侧展示。<br>邀请与告白属于游戏任务，无需对方回应或真实表态。</p>
+<nav class="routes" aria-label="访问线路"><a href="http://129.204.252.209:8088/">主线路</a><a href="https://leptc.github.io/ruiyi-heart-wheel-pages/">备用线路</a><!-- offline-link --></nav>
+</div>
+<dialog id="rulesDialog"><div class="dialog-head"><h2>轻松玩，慢慢聊</h2><button class="close">关闭</button></div><ol class="rule">
+<li><span data-bank-count>80</span>题开局随机混排，每道题抽中的机会相同。可以混抽，也可以只抽一种；切换模式保留本轮记录。</li>
+<li>默认不重复。换题时，刚才的题目仍计入已抽；抽完后点「重新开局」。取消“不重复”则可重复抽。</li>
+<li>左右按本人坐着时的方向沿桌边数人，不包含自己。人数不足就绕桌继续数，经过自己时跳过。</li>
+<li>开始前确定“正对面、左前方对角线、右前方对角线”各自对应谁。对应座位无人或对方跳过，向右顺延一位；只有自己时换题。</li>
+<li>大冒险由抽题者完成，对方无需共同表演或回应。出题任务有默认选项；邀请和告白不代表真实表态。</li>
+<li>真心话可以讲理由或故事，无需说他人姓名。每题建议一分钟；自愿参与，任何人都可以跳过。</li>
+<li>刷新页面会尽量保留本轮抽题记录；记录只保存在当前浏览器。文件可离线使用。</li></ol></dialog>
+<dialog id="bankDialog"><div class="dialog-head"><h2>全部题库 · <span data-bank-count>80</span>题</h2><button class="close">关闭</button></div><input id="search" class="search" placeholder="搜索题目、真心话或大冒险" aria-label="搜索题库"><div id="bankList"></div></dialog>
+<dialog id="historyDialog"><div class="dialog-head"><h2>本轮抽题记录</h2><button class="close">关闭</button></div><div id="historyList"></div></dialog>
+<dialog id="resetDialog"><div class="dialog-head"><h2>重新开局？</h2><button class="close">取消</button></div><p class="rule">将清空本轮记录，并重新打散<span data-bank-count>80</span>题。</p><button id="confirmReset" class="spin">确认重新开局</button></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<script>'use strict';
+// Runtime bank: keep stable IDs when editing questions.
+const BANK = [
+  {"id": "T1", "type": "truth", "number": 1, "text": "你看起来最好追，还是最难追？实际上呢？", "spicy": false},
+  {"id": "T2", "type": "truth", "number": 2, "text": "刚认识你的人，最容易误判你哪一点？", "spicy": false},
+  {"id": "T3", "type": "truth", "number": 3, "text": "你单身时很正常，恋爱后会变出什么隐藏人格？", "spicy": false},
+  {"id": "T4", "type": "truth", "number": 4, "text": "你有什么“嘴上嫌弃，实际很吃这一套”的浪漫？", "spicy": false},
+  {"id": "T5", "type": "truth", "number": 5, "text": "你的理想型，和真正心动过的人差得有多远？", "spicy": false},
+  {"id": "T6", "type": "truth", "number": 6, "text": "为了在喜欢的人面前加分，你做过什么“精心准备却假装随意”的事？", "spicy": false},
+  {"id": "T7", "type": "truth", "number": 7, "text": "什么兴趣爱好，能让你对一个人瞬间加分？", "spicy": false},
+  {"id": "T8", "type": "truth", "number": 8, "text": "跟你约会，对方最容易遇到什么意外惊喜？", "spicy": false},
+  {"id": "T9", "type": "truth", "number": 9, "text": "如果你参加恋综，观众最可能吐槽你什么？", "spicy": false},
+  {"id": "T10", "type": "truth", "number": 10, "text": "你说自己“不急着恋爱”时，到底有几分是真的？", "spicy": false},
+  {"id": "T11", "type": "truth", "number": 11, "text": "你最扛不住哪种撩法？举个例子。", "spicy": false},
+  {"id": "T12", "type": "truth", "number": 12, "text": "什么情况下，你会愿意主动追一个人？", "spicy": false},
+  {"id": "T13", "type": "truth", "number": 13, "text": "你对一个人有意思时，最藏不住的表现是什么？", "spicy": false},
+  {"id": "T14", "type": "truth", "number": 14, "text": "哪种聊天内容，会让你觉得“我们已经不只是普通朋友了”？", "spicy": false},
+  {"id": "T15", "type": "truth", "number": 15, "text": "聊天聊到什么程度，你会想“我们该见面了”？", "spicy": false},
+  {"id": "T16", "type": "truth", "number": 16, "text": "约会时，对方做什么会让你舍不得结束，想再待一会儿？", "spicy": false},
+  {"id": "T17", "type": "truth", "number": 17, "text": "对方哪句话，会让你觉得“有戏”？", "spicy": false},
+  {"id": "T18", "type": "truth", "number": 18, "text": "你觉得自己最容易让别人误会的行为是什么？", "spicy": false},
+  {"id": "T19", "type": "truth", "number": 19, "text": "喜欢的人告诉你“有人在追我”，你会怎么接这句话？", "spicy": false},
+  {"id": "T20", "type": "truth", "number": 20, "text": "什么样的主动让你心动，什么样的主动让你想逃？", "spicy": false},
+  {"id": "T21", "type": "truth", "number": 21, "text": "什么细节会让你从“没感觉”变成“可以了解一下”？", "spicy": false},
+  {"id": "T22", "type": "truth", "number": 22, "text": "一个人很会撩，但你知道TA对别人也这样，你还会心动吗？", "spicy": false},
+  {"id": "T23", "type": "truth", "number": 23, "text": "暧昧时，对方做什么会让你忍不住吃醋？", "spicy": false},
+  {"id": "T24", "type": "truth", "number": 24, "text": "第一次约会很愉快，你会主动约第二次，还是等对方？", "spicy": false},
+  {"id": "T25", "type": "truth", "number": 25, "text": "你最喜欢哪种确定关系的方式？直接问，还是等一个自然的瞬间？", "spicy": false},
+  {"id": "T26", "type": "truth", "number": 26, "text": "一个让你心动，一个让你安心，你现在会选谁？", "spicy": false},
+  {"id": "T27", "type": "truth", "number": 27, "text": "颜值很合你心意，但聊天很无趣，你愿意约几次？", "spicy": false},
+  {"id": "T28", "type": "truth", "number": 28, "text": "对方样样都好，唯独你没有心动，你会试着谈吗？", "spicy": false},
+  {"id": "T29", "type": "truth", "number": 29, "text": "刚认识就天天聊天，你觉得是加分，还是容易聊腻？", "spicy": false},
+  {"id": "T30", "type": "truth", "number": 30, "text": "还没确定关系，同时了解几个人，你怎么看？", "spicy": false},
+  {"id": "T31", "type": "truth", "number": 31, "text": "暧昧一个月还不明确关系，你会问、等，还是撤？", "spicy": false},
+  {"id": "T32", "type": "truth", "number": 32, "text": "对方说“我慢热”，你怎么判断是真慢热还是没兴趣？", "spicy": false},
+  {"id": "T33", "type": "truth", "number": 33, "text": "恋人和异性单独吃饭，你最在意哪一个细节？", "spicy": false},
+  {"id": "T34", "type": "truth", "number": 34, "text": "恋人还留着前任的照片，你会怎么想？", "spicy": false},
+  {"id": "T35", "type": "truth", "number": 35, "text": "对方吃醋却不明说，你觉得可爱还是累？", "spicy": false},
+  {"id": "T36", "type": "truth", "number": 36, "text": "每天都说晚安，但很少约见面，你觉得算认真吗？", "spicy": false},
+  {"id": "T37", "type": "truth", "number": 37, "text": "约会时对方全程买单，却也全程做主，你是什么感觉？", "spicy": false},
+  {"id": "T38", "type": "truth", "number": 38, "text": "对方很喜欢你，却说不想结婚，你还会开始吗？", "spicy": false},
+  {"id": "T39", "type": "truth", "number": 39, "text": "恋人对别人也很热情，你会在哪个瞬间觉得“这已经越界了”？", "spicy": false},
+  {"id": "T40", "type": "truth", "number": 40, "text": "你觉得恋爱中最容易被包装成“爱”的控制是什么？", "spicy": false},
+  {"id": "T41", "type": "truth", "number": 41, "text": "你喜欢一个人时，最舍得为对方付出什么？", "spicy": false},
+  {"id": "T42", "type": "truth", "number": 42, "text": "你心情不好时，恋人做什么最容易哄好你？", "spicy": false},
+  {"id": "T43", "type": "truth", "number": 43, "text": "你嘴上说“没事”的时候，希望对方继续问吗？", "spicy": false},
+  {"id": "T44", "type": "truth", "number": 44, "text": "吵架时，你最受不了对方哪种反应？", "spicy": false},
+  {"id": "T45", "type": "truth", "number": 45, "text": "恋爱里，你有什么自己也知道不太好改的毛病？", "spicy": false},
+  {"id": "T46", "type": "truth", "number": 46, "text": "对方多久不回消息，你会开始多想？通常会想什么？", "spicy": false},
+  {"id": "T47", "type": "truth", "number": 47, "text": "什么事情会让你觉得“TA真的把我放在心上”？", "spicy": false},
+  {"id": "T48", "type": "truth", "number": 48, "text": "恋人想和你天天见面，你会高兴到第几天？", "spicy": false},
+  {"id": "T49", "type": "truth", "number": 49, "text": "你希望恋人参与你生活的哪些部分，又给你留哪些空间？", "spicy": false},
+  {"id": "T50", "type": "truth", "number": 50, "text": "和你谈恋爱，最幸福和最费心的地方分别是什么？", "spicy": false},
+  {"id": "D1", "type": "dare", "number": 1, "text": "面向你左手边第3位，认真说一句土味情话。说完保持表情3秒，不能自己先笑。", "spicy": false},
+  {"id": "D2", "type": "dare", "number": 2, "text": "向你右手边第4位发出一次约会邀请。必须说清楚去哪、做什么，以及“为什么想约你”。", "spicy": false},
+  {"id": "D3", "type": "dare", "number": 3, "text": "原地单脚站立15秒。另一只脚不能落地，双手不能扶东西。", "spicy": false},
+  {"id": "D4", "type": "dare", "number": 4, "text": "夸你左手边第2位三句话。不能重复，也不能三句都夸外表。", "spicy": false},
+  {"id": "D5", "type": "dare", "number": 5, "text": "连续三遍说清楚：“红鲤鱼与绿鲤鱼与驴。”说错可以重新开始。", "spicy": false},
+  {"id": "D6", "type": "dare", "number": 6, "text": "看向你右手边第3位，说：“刚才有句话，我一直想对你说……”然后自己接完，可以用玩笑结尾。", "spicy": false},
+  {"id": "D7", "type": "dare", "number": 7, "text": "用相亲节目主持人的口吻介绍自己。20秒内讲出两个优点和一个“售后注意事项”。", "spicy": false},
+  {"id": "D8", "type": "dare", "number": 8, "text": "面向你左前方对角线的那位，解释约会迟到的原因。给出一个离谱但完整的理由。", "spicy": false},
+  {"id": "D9", "type": "dare", "number": 9, "text": "向你右手边第2位推销“和我约会的三大好处”。必须像广告一样有说服力。", "spicy": false},
+  {"id": "D10", "type": "dare", "number": 10, "text": "面向你左手边第3位，说一句不带“喜欢”和“爱”的告白。", "spicy": true},
+  {"id": "D11", "type": "dare", "number": 11, "text": "用偶像剧男／女主角的语气，对正对面的人说一段告白台词。至少两句。", "spicy": false},
+  {"id": "D12", "type": "dare", "number": 12, "text": "向你右手边第4位推荐一道你喜欢的菜。最后用一句话把推荐变成吃饭邀约。", "spicy": false},
+  {"id": "D13", "type": "dare", "number": 13, "text": "用自己名字里的一个字，造一句夸自己的话。不能直接说“我很好”。", "spicy": false},
+  {"id": "D14", "type": "dare", "number": 14, "text": "给你右前方对角线的那位设计一份约会计划。必须包含吃什么、玩什么和一个小惊喜。", "spicy": false},
+  {"id": "D15", "type": "dare", "number": 15, "text": "用播音腔，给你右手边第3位做一段20秒的征友介绍。根据现场已知信息，不能编造私人经历。", "spicy": false},
+  {"id": "D16", "type": "dare", "number": 16, "text": "用“我这个人最大的优点，就是……”开头夸自己。连说三句，越一本正经越好。", "spicy": false},
+  {"id": "D17", "type": "dare", "number": 17, "text": "面向你左手边第2位，说出你从今天交流中注意到的一个优点。再说说为什么欣赏TA。", "spicy": false},
+  {"id": "D18", "type": "dare", "number": 18, "text": "请你右手边第2位给出三个词，用这三个词编一段浪漫故事。对方不出词时，使用“雨天、咖啡、末班车”。", "spicy": false},
+  {"id": "D19", "type": "dare", "number": 19, "text": "教大家一句你家乡的方言，内容是“今天很高兴认识你”。再解释普通话意思。", "spicy": false},
+  {"id": "D20", "type": "dare", "number": 20, "text": "请你左前方对角线的那位指定“早餐、午餐、晚餐”中的一个。你推荐一家自己吃过的店，并说出必点菜；对方不出题时，默认早餐。", "spicy": false},
+  {"id": "D21", "type": "dare", "number": 21, "text": "做一次30秒的“恋爱专家”发言。主题是“为什么和我谈恋爱值得考虑”，要求有三个理由。", "spicy": false},
+  {"id": "D22", "type": "dare", "number": 22, "text": "假设约会地点突然关门了。面向你右手边第2位，在20秒内提出一个让人愿意继续约会的替代方案。", "spicy": false},
+  {"id": "D23", "type": "dare", "number": 23, "text": "夸你左手边第2位两句话。一句夸外在，一句夸今天表现出的特点，两句都要具体。", "spicy": false},
+  {"id": "D24", "type": "dare", "number": 24, "text": "请你左手边第2位出一个约会地点，你说出在那里可以安排的三件事。对方不出题时，地点用“公园”。", "spicy": false},
+  {"id": "D25", "type": "dare", "number": 25, "text": "面向你正对面的那位，说出你对其第一印象中最有吸引力的一点。不能只说“好看”。", "spicy": true},
+  {"id": "D26", "type": "dare", "number": 26, "text": "面向你右手边第3位，说一句能让对方感到被认真注意到的话。不能使用“漂亮、帅、气质好”。", "spicy": true},
+  {"id": "D27", "type": "dare", "number": 27, "text": "发表“年度最佳约会搭档”获奖感言。必须感谢一个人、一种食物和一个生活习惯。", "spicy": false},
+  {"id": "D28", "type": "dare", "number": 28, "text": "编一个30秒的约会故事。从“我们刚走进餐厅，就发现……”开始，结尾必须有反转。", "spicy": false},
+  {"id": "D29", "type": "dare", "number": 29, "text": "面向你左手边第2位，说一段15秒的直球告白。不许用土味情话，要自然、认真。", "spicy": true},
+  {"id": "D30", "type": "dare", "number": 30, "text": "面向你右手边第4位，认真说一句“我想进一步了解你，因为……”。理由要来自今天实际观察到的内容。", "spicy": true}
+];
+</script>
+<script>'use strict';
+const KEY = 'meetup-wheel-v1';
+const $ = id => document.getElementById(id);
+const validIds = new Set(BANK.map(q => q.id));
+let state = {
+  order: [],
+  used: [],
+  history: [],
+  mode: 'all',
+  noRepeat: true
+};
+let rotation = 0,
+  busy = false,
+  current = null,
+  timerHandle = null,
+  timeLeft = 60,
+  deadline = 0;
+
+function randomInt(n) {
+  if (!Number.isInteger(n) || n < 1) throw Error('invalid range');
+  const a = new Uint32Array(1),
+    limit = 4294967296 - (4294967296 % n);
+  do {
+    crypto.getRandomValues(a)
+  } while (a[0] >= limit);
+  return a[0] % n
+}
+
+function shuffle(items) {
+  const copy = items.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = randomInt(i + 1);
+    [copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy
+}
+
+function normalize(saved) {
+  if (!saved || !Array.isArray(saved.order) || saved.order.length !== BANK.length || new Set(saved.order).size !== BANK.length || !saved.order.every(id => validIds.has(id))) return null;
+  return {
+    order: saved.order,
+    used: Array.isArray(saved.used) ? [...new Set(saved.used.filter(id => validIds.has(id)))] : [],
+    history: Array.isArray(saved.history) ? saved.history.filter(h => h && validIds.has(h.id) && Number.isFinite(h.at)).slice(-300) : [],
+    mode: ['all', 'truth', 'dare'].includes(saved.mode) ? saved.mode : 'all',
+    noRepeat: saved.noRepeat !== false
+  }
+}
+
+function toast(message) {
+  $('toast').textContent = message;
+  $('toast').hidden = false;
+  clearTimeout(toast.handle);
+  toast.handle = setTimeout(() => $('toast').hidden = true, 4000)
+}
+
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state))
+  } catch (e) {
+    toast('浏览器未能保存记录；当前页面仍可正常抽题。')
+  }
+}
+try {
+  const saved = normalize(JSON.parse(localStorage.getItem(KEY)));
+  if (saved) state = saved
+} catch (e) {}
+if (!state.order.length) state.order = shuffle(BANK.map(q => q.id));
+const lookup = new Map(BANK.map(q => [q.id, q]));
+
+function entries() {
+  return state.order.map(id => lookup.get(id)).filter(q => state.mode === 'all' || q.type === state.mode)
+}
+
+function candidates() {
+  return entries().filter(q => !state.noRepeat || !state.used.includes(q.id))
+}
+
+function wheelDraw() {
+  const canvas = $('wheel'),
+    size = canvas.getBoundingClientRect().width || 500,
+    dpr = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = Math.round(size * dpr);
+  canvas.height = Math.round(size * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.translate(size / 2, size / 2);
+  ctx.rotate(rotation * Math.PI / 180);
+  const items = entries(),
+    r = size / 2 - 3,
+    step = Math.PI * 2 / items.length;
+  items.forEach((q, i) => {
+    const start = -Math.PI / 2 + i * step,
+      used = state.used.includes(q.id);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, r, start, start + step);
+    ctx.closePath();
+    ctx.fillStyle = used ? '#ded3d5' : q.type === 'truth' ? (i % 2 ? '#fda8b3' : '#f47990') : (i % 2 ? '#bdabd6' : '#9476b7');
+    ctx.fill();
+    ctx.strokeStyle = '#fff8';
+    ctx.lineWidth = .7;
+    ctx.stroke();
+    ctx.save();
+    ctx.rotate(start + step / 2);
+    ctx.fillStyle = used ? '#96888c' : '#fff';
+    ctx.font = '600 ' + Math.max(9, Math.min(12, size / 39)) + 'px system-ui';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(i + 1).padStart(2, '0'), r - 10, 0);
+    ctx.restore()
+  });
+}
+
+function controls() {
+  const remaining = candidates().length,
+    total = entries().length;
+  $('spin').disabled = busy || remaining === 0;
+  $('skip').disabled = busy || !current || remaining === 0;
+  $('reset').disabled = busy;
+  $('noRepeat').disabled = busy;
+  document.querySelectorAll('[data-mode]').forEach(b => {
+    b.disabled = busy;
+    b.classList.toggle('active', b.dataset.mode === state.mode);
+    b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode))
+  });
+  $('spin').textContent = busy ? '好运转动中…' : remaining === 0 ? '本轮已抽完' : '开始转动 ↗';
+  $('progress').textContent = state.noRepeat ? '本模式剩余 ' + remaining + ' / ' + total + ' 题 · 本轮共抽 ' + state.history.length + ' 次' : '本模式 ' + total + ' 题 · 允许重复 · 本轮共抽 ' + state.history.length + ' 次';
+  $('historyCount').textContent = state.history.length;
+  $('noRepeat').checked = state.noRepeat;
+}
+
+function timerStop() {
+  if (timerHandle !== null) clearInterval(timerHandle);
+  timerHandle = null;
+  $('timerStart').textContent = '开始计时'
+}
+
+function timerRender() {
+  $('timer').textContent = String(Math.floor(timeLeft / 60)).padStart(2, '0') + ':' + String(timeLeft % 60).padStart(2, '0')
+}
+
+function timerReset() {
+  timerStop();
+  timeLeft = 60;
+  timerRender()
+}
+
+function result(q) {
+  current = q;
+  $('badge').textContent = q.type === 'truth' ? '真心话' : '大冒险' + (q.spicy ? ' · ♡ 微心动' : '');
+  $('badge').classList.toggle('dare', q.type === 'dare');
+  $('number').textContent = (q.type === 'truth' ? '真心话' : '大冒险') + ' #' + String(q.number).padStart(2, '0');
+  $('question').textContent = q.text;
+  $('hint').textContent = q.type === 'truth' ? '说说理由，或讲一个具体故事。无需透露他人姓名。' : '由你完成，对方无需回应。邀请与告白属于游戏任务。';
+  $('timerStart').disabled = false;
+  $('timerReset').disabled = false;
+  timerReset()
+}
+
+function idle() {
+  current = null;
+  $('badge').textContent = '今晚，从这一题开始';
+  $('badge').classList.remove('dare');
+  $('number').textContent = BANK.length + ' 道题已就绪';
+  $('question').textContent = '真心话，还是大冒险？交给一点小小的运气。';
+  $('hint').textContent = '点「开始转动」，抽出你的题目。无需道具，轻松开场。';
+  $('timerStart').disabled = true;
+  $('timerReset').disabled = true;
+  timerReset()
+}
+async function spin() {
+  if (busy) return;
+  const pool = candidates();
+  if (!pool.length) {
+    toast('这个模式已经抽完，切换模式或重新开局吧。');
+    return
+  }
+  busy = true;
+  timerStop();
+  controls();
+  const selected = pool[randomInt(pool.length)],
+    items = entries(),
+    index = items.findIndex(q => q.id === selected.id),
+    landing = (360 - (index + .5) * 360 / items.length) % 360;
+  const start = rotation,
+    target = start + 360 * 5 + ((landing - start % 360 + 360) % 360),
+    duration = matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 3900;
+  $('badge').textContent = '好运转动中';
+  $('question').textContent = '下一题，会是什么？';
+  $('hint').textContent = '真诚一点，勇敢一点，也可以幽默一点。';
+  await new Promise(resolve => {
+    const began = performance.now();
+
+    function frame(now) {
+      const t = Math.min((now - began) / duration, 1);
+      rotation = start + (target - start) * (1 - Math.pow(1 - t, 4));
+      wheelDraw();
+      if (t < 1) requestAnimationFrame(frame);
+      else resolve()
+    }
+    requestAnimationFrame(frame)
+  });
+  rotation = landing;
+  if (!state.used.includes(selected.id)) state.used.push(selected.id);
+  state.history.push({
+    id: selected.id,
+    at: Date.now()
+  });
+  if (state.history.length > 300) state.history.shift();
+  persist();
+  result(selected);
+  busy = false;
+  controls();
+  wheelDraw();
+  if (innerWidth <= 760) document.querySelector('.card').scrollIntoView({
+    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    block: 'start'
+  });
+}
+$('spin').onclick = spin;
+$('skip').onclick = spin;
+document.querySelectorAll('[data-mode]').forEach(button => button.onclick = () => {
+  if (busy) return;
+  state.mode = button.dataset.mode;
+  rotation = 0;
+  persist();
+  controls();
+  wheelDraw()
+});
+$('noRepeat').onchange = () => {
+  state.noRepeat = $('noRepeat').checked;
+  persist();
+  controls()
+};
+$('timerStart').onclick = () => {
+  if (timerHandle !== null) {
+    timeLeft = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    timerStop();
+    $('timerStart').textContent = '继续计时';
+    timerRender();
+    return
+  }
+  if (timeLeft === 0) timeLeft = 60;
+  deadline = Date.now() + timeLeft * 1000;
+  $('timerStart').textContent = '暂停计时';
+  timerHandle = setInterval(() => {
+    timeLeft = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+    timerRender();
+    if (timeLeft === 0) {
+      timerStop();
+      toast('一分钟到了，想继续聊也可以。')
+    }
+  }, 200)
+};
+$('timerReset').onclick = timerReset;
+$('reset').onclick = () => {
+  if (!busy) $('resetDialog').showModal()
+};
+$('confirmReset').onclick = () => {
+  if (busy) return;
+  $('resetDialog').close();
+  state.order = shuffle(BANK.map(q => q.id));
+  state.used = [];
+  state.history = [];
+  rotation = 0;
+  idle();
+  persist();
+  controls();
+  wheelDraw();
+  toast('新一轮已就绪，' + BANK.length + '题重新打散。')
+};
+
+function listRender(root, items, history = false) {
+  root.replaceChildren();
+  if (!items.length) {
+    const p = document.createElement('p');
+    p.className = 'empty';
+    p.textContent = history ? '还没有抽题记录，开始转动吧。' : '没有找到对应题目。';
+    root.append(p);
+    return
+  }
+  items.forEach(item => {
+    const q = history ? lookup.get(item.id) : item;
+    const row = document.createElement('div');
+    row.className = 'entry';
+    const meta = document.createElement('small');
+    meta.textContent = (q.type === 'truth' ? '真心话' : '大冒险') + ' #' + String(q.number).padStart(2, '0') + (q.spicy ? ' · ♡ 微心动' : '') + (history ? ' · ' + new Date(item.at).toLocaleTimeString('zh-CN', {
+      hour: '2-digit',
+      minute: '2-digit'
+    }) : state.used.includes(q.id) ? ' · 已抽过' : '');
+    const p = document.createElement('p');
+    p.textContent = q.text;
+    row.append(meta, p);
+    root.append(row)
+  })
+}
+
+function bankRender() {
+  const query = $('search').value.trim().toLowerCase();
+  listRender($('bankList'), state.order.map(id => lookup.get(id)).filter(q => ((q.type === 'truth' ? '真心话' : '大冒险') + ' ' + q.id + ' ' + q.text).toLowerCase().includes(query)))
+}
+$('bankButton').onclick = () => {
+  bankRender();
+  $('bankDialog').showModal()
+};
+$('search').oninput = bankRender;
+$('historyButton').onclick = () => {
+  listRender($('historyList'), state.history.slice().reverse(), true);
+  $('historyDialog').showModal()
+};
+$('rules').onclick = () => $('rulesDialog').showModal();
+document.querySelectorAll('dialog .close').forEach(b => b.onclick = () => b.closest('dialog').close());
+$('fullscreen').onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+    else toast('此浏览器不支持全屏，可使用浏览器菜单放大页面。')
+  } catch (e) {
+    toast('无法进入全屏，可使用浏览器菜单放大页面。')
+  }
+};
+document.addEventListener('fullscreenchange', () => $('fullscreen').textContent = document.fullscreenElement ? '退出全屏' : '全屏');
+window.addEventListener('resize', wheelDraw);
+if (state.history.length) result(lookup.get(state.history[state.history.length - 1].id));
+controls();
+wheelDraw();
+persist();
+
+const truthCount = BANK.filter(q => q.type === 'truth').length;
+document.querySelector('[data-bank-summary]').textContent = truthCount + ' 道真心话 · ' + (BANK.length - truthCount) + ' 道大冒险';
+document.querySelectorAll('[data-bank-count]').forEach(el => el.textContent = BANK.length);
+$('wheel').setAttribute('aria-label', BANK.length + '题随机转盘，按开始转动抽题');
+if (!current) $('number').textContent = BANK.length + ' 道题已就绪';
+</script>
+</body></html>

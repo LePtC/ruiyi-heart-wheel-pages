@@ -1,0 +1,539 @@
+:root {
+  --ink: #38252f;
+  --muted: #8b737d;
+  --paper: #fffaf5;
+  --pink: #f4647a;
+  --purple: #8467b2;
+  --line: #eddfdf
+}
+
+* {
+  box-sizing: border-box
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(ellipse at 5% 5%, #ffe3d9, transparent 48%), radial-gradient(ellipse at 95% 85%, #eadff7, transparent 45%), var(--paper);
+  min-height: 100vh
+}
+
+button,
+input {
+  font: inherit
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  transition: transform .15s, background .2s
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px)
+}
+
+button:disabled {
+  cursor: default;
+  opacity: .45
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--purple);
+  outline-offset: 4px
+}
+
+.shell {
+  max-width: 1200px;
+  margin: auto;
+  padding: 32px 30px
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 1px
+}
+
+.brand span {
+  color: var(--pink)
+}
+
+.tools {
+  display: flex;
+  gap: 8px
+}
+
+.soft {
+  background: #ffffffb5;
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 12px;
+  color: var(--ink)
+}
+
+.hero {
+  text-align: center;
+  margin: 38px 0 26px
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: var(--muted)
+}
+
+h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  margin: 10px 0 12px;
+  letter-spacing: -2px
+}
+
+.sub {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  background: #eee3e6;
+  border-radius: 40px;
+  padding: 5px;
+  width: fit-content;
+  margin: 22px auto 0
+}
+
+.tab {
+  background: transparent;
+  padding: 11px 23px;
+  border-radius: 30px;
+  color: var(--muted)
+}
+
+.tab.active {
+  background: #fff;
+  box-shadow: 0 3px 10px #38252f0c;
+  color: var(--ink);
+  font-weight: 700
+}
+
+.game {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  gap: 35px;
+  align-items: center
+}
+
+.wheel-panel {
+  text-align: center
+}
+
+.wheel-shell {
+  position: relative;
+  width: min(100%, 540px);
+  margin: 0 auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff8f3;
+  padding: 14px;
+  box-shadow: 0 16px 60px #9e556c19, 0 0 0 1px #ffffff inset
+}
+
+#wheel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%
+}
+
+.pointer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 38px;
+  background: var(--ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  z-index: 2;
+  filter: drop-shadow(0 3px 4px #0003)
+}
+
+.hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 7px solid #fff;
+  box-shadow: 0 4px 20px #38252f22;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  pointer-events: none
+}
+
+.hub b {
+  font-size: 30px;
+  color: var(--pink)
+}
+
+.hub small {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted)
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin: 20px 0 14px;
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: var(--pink)
+}
+
+.dot.purple {
+  background: var(--purple)
+}
+
+.dot.gray {
+  background: #d8cecf
+}
+
+.spin {
+  padding: 17px 44px;
+  background: var(--ink);
+  color: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px #38252f20;
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 240px
+}
+
+.progress {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 14px
+}
+
+.card {
+  background: #ffffffc9;
+  backdrop-filter: blur(8px);
+  border: 1px solid white;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 14px 50px #38252f09;
+  min-height: 370px;
+  display: flex;
+  flex-direction: column
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center
+}
+
+.badge {
+  font-size: 12px;
+  background: #fff0f2;
+  color: #bd4560;
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-weight: 700
+}
+
+.badge.dare {
+  background: #eee7f6;
+  color: #755298
+}
+
+.number {
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.question {
+  font-size: clamp(23px, 2.3vw, 31px);
+  font-weight: 650;
+  line-height: 1.7;
+  letter-spacing: .2px;
+  flex: 1;
+  margin: 24px 0
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0 0 22px
+}
+
+.actions {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  flex-wrap: wrap
+}
+
+.timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 23px;
+  min-width: 65px;
+  color: var(--purple);
+  font-weight: 700
+}
+
+.card-foot {
+  border-top: 1px solid var(--line);
+  margin-top: 22px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted)
+}
+
+.bottom {
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px
+}
+
+.toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted)
+}
+
+input[type=checkbox] {
+  accent-color: var(--pink);
+  width: 18px;
+  height: 18px
+}
+
+.bottom-actions {
+  display: flex;
+  gap: 8px
+}
+
+.note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 28px;
+  line-height: 1.8
+}
+
+dialog {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 25px;
+  width: min(680px, 92vw);
+  max-height: 85vh;
+  background: var(--paper);
+  color: var(--ink)
+}
+
+dialog::backdrop {
+  background: #38252f66;
+  backdrop-filter: blur(4px)
+}
+
+.dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px
+}
+
+.dialog-head h2 {
+  margin: 0;
+  font-size: 22px
+}
+
+.close {
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 10px;
+  padding: 7px 13px
+}
+
+.search {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 15px;
+  background: white;
+  color: var(--ink)
+}
+
+.entry {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.8
+}
+
+.entry small {
+  color: var(--muted);
+  font-size: 11px
+}
+
+.entry p {
+  margin: 5px 0 0
+}
+
+.rule {
+  line-height: 1.9;
+  color: #69535e
+}
+
+.rule li {
+  margin-bottom: 12px
+}
+
+.empty {
+  color: var(--muted);
+  padding: 25px 0;
+  text-align: center
+}
+
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  z-index: 20;
+  font-size: 13px;
+  max-width: 90vw
+}
+
+@media(max-width:760px) {
+  .shell {
+    padding: 20px 18px
+  }
+
+  .brand {
+    font-size: 17px
+  }
+
+  .tools .soft {
+    padding: 8px 11px;
+    font-size: 12px
+  }
+
+  .hero {
+    margin: 28px 0 22px
+  }
+
+  h1 {
+    letter-spacing: -1px
+  }
+
+  .game {
+    grid-template-columns: 1fr;
+    gap: 25px
+  }
+
+  .wheel-shell {
+    max-width: 390px
+  }
+
+  .card {
+    min-height: 290px;
+    padding: 23px
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: stretch
+  }
+
+  .bottom-actions {
+    justify-content: center;
+    flex-wrap: wrap
+  }
+
+  .toggle {
+    justify-content: center
+  }
+
+  .hub {
+    width: 80px;
+    height: 80px
+  }
+
+  .hub b {
+    font-size: 24px
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 13px
+  }
+
+  .legend {
+    gap: 16px
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  * {
+    scroll-behavior: auto !important
+  }
+}
+
+.routes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin: 16px 0;
+  font-size: 12px;
+}
+
+.routes a {
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
